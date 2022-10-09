@@ -24,11 +24,11 @@
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <fragment
+        android:id="@+id/title_fragment"
+        android:name="com.example.cyclopedia.MapsFragment"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_maps" />
 </androidx.constraintlayout.widget.ConstraintLayout>
