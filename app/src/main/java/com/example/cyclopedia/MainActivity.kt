@@ -4,10 +4,8 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-import android.net.Network
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -72,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             mapType = GoogleMap.MAP_TYPE_NORMAL
             setOnMapClickListener {
                 Toast.makeText (this@MainActivity, "Clicked on map screen", Toast.LENGTH_SHORT).show()
+                updateLocation()
             }
         }
     }
@@ -104,5 +103,12 @@ class MainActivity : AppCompatActivity() {
         var geocoder:Geocoder = Geocoder(this, Locale.getDefault())
         addressList = geocoder.getFromLocation(location.latitude,location.longitude,1) as ArrayList<Address>
         textView_address.text =  addressList.get(0).getAddressLine(0)
+    }
+    private fun updateLocation() {
+        if (LocationTrack(this).canGetLocation) {
+            Toast.makeText(this@MainActivity,"Got location",Toast.LENGTH_SHORT).show()
+            var gpsPos: String = LocationTrack(this).getLatitude().toString() + "," + LocationTrack(this).getLongitude().toString()
+            textView_GPS_coord.text = gpsPos
+        }
     }
 }
