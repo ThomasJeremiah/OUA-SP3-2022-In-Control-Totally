@@ -20,11 +20,12 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     //Marker position on map
-    private val position = LatLng(-37.808514, 144.964749)
-    private val location = Location(LocationManager.NETWORK_PROVIDER)
+    private var position = LatLng(-37.808514, 144.964749)
+    private var location = Location(LocationManager.GPS_PROVIDER)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
         setContentView(R.layout.activity_main)
         with(mapView) {
             // Initialise the MapView
@@ -74,6 +75,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    private fun updateMapLocation(map : GoogleMap) {
+        with(map) {
+            moveCamera(CameraUpdateFactory.newLatLngZoom(position, 13f))
+            addMarker(MarkerOptions().position(position))
+            mapType = GoogleMap.MAP_TYPE_NORMAL
+        }
+    }
     //Below methods are required by MapView component.
     override fun onResume() {
         super.onResume()
@@ -107,8 +115,19 @@ class MainActivity : AppCompatActivity() {
     private fun updateLocation() {
         if (LocationTrack(this).canGetLocation) {
             Toast.makeText(this@MainActivity,"Got location",Toast.LENGTH_SHORT).show()
-            var gpsPos: String = LocationTrack(this).getLatitude().toString() + "," + LocationTrack(this).getLongitude().toString()
-            textView_GPS_coord.text = gpsPos
+            position = LatLng(LocationTrack(this).getLatitude(),LocationTrack(this).getLongitude())
+            textView_GPS_coord.text = position.toString()
+            location = LocationTrack(this).getLocationVar()
+            upDateAddress(location)
+            with(mapView) {
+
+                // Set the map ready callback to receive the GoogleMap object
+                getMapAsync{
+                    MapsInitializer.initialize(applicationContext)
+                    setMapLocation(it)
+                }
+            }
+
         }
     }
 }
