@@ -1,9 +1,11 @@
 package com.example.cyclopedia
 
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -38,19 +40,23 @@ class MainActivity : AppCompatActivity() {
         }
         //Listeners for all the interactive objects on the screen.
         newsButton.setOnClickListener {
-            Toast.makeText (this@MainActivity, "Clicked on news", Toast.LENGTH_SHORT).show()
+            openWebPage("https://www.cyclingnews.com/")
+
         }
         mapButton.setOnClickListener{
             Toast.makeText (this@MainActivity, "Clicked on map button", Toast.LENGTH_SHORT).show()
         }
         reportButton.setOnClickListener{
-            Toast.makeText (this@MainActivity, "Clicked on report", Toast.LENGTH_SHORT).show()
+            //Nav to activity (screen)
+            startActivity(Intent(this,ReportsScreen::class.java))
         }
         settingsBtn.setOnClickListener{
-            Toast.makeText (this@MainActivity, "Clicked on settings", Toast.LENGTH_SHORT).show()
+            //Nav to activity (screen)
+            startActivity(Intent(this,SettingsScreen::class.java))
         }
         loginBtn.setOnClickListener{
-            Toast.makeText (this@MainActivity, "Clicked on login", Toast.LENGTH_SHORT).show()
+            //Nav to activity (screen)
+            startActivity(Intent(this,LoginScreen::class.java))
         }
 
         //Write the value of 'position' variable to the screen.
@@ -60,10 +66,14 @@ class MainActivity : AppCompatActivity() {
         location.latitude = position.latitude
         location.longitude = position.longitude
         upDateAddress(location)
-
-
-
     }
+
+    private fun openWebPage(url: String) {
+        val webpage: Uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
+            startActivity(intent)
+    }
+
     private fun setMapLocation(map : GoogleMap) {
         with(map) {
             moveCamera(CameraUpdateFactory.newLatLngZoom(position, 13f))
