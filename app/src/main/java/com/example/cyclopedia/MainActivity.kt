@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Hides the top bar
         supportActionBar?.hide()
         setContentView(R.layout.activity_main)
         with(mapView) {
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     private fun openWebPage(url: String) {
         val webpage: Uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, webpage)
-            startActivity(intent)
+        startActivity(intent)
     }
 
     private fun setMapLocation(map : GoogleMap) {
