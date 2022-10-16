@@ -46,15 +46,17 @@ class ApiAccess {
          * @return is a string that should be converted into a JSON object to extract the data
          */
         val client = HttpClient(Android)
-        val response: HttpResponse = client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
-            method = HttpMethod.Post
-            url { appendPathSegments("track", "bylocation/")
-                parameters.append("lat", lat.toString())
-                parameters.append("lon", lon.toString())
-            }
-            headers {  append(HttpHeaders.Accept, "application/json") }
+        val response: HttpResponse =
+            client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
+                method = HttpMethod.Post
+                url {
+                    appendPathSegments("track", "bylocation/")
+                    parameters.append("lat", lat.toString())
+                    parameters.append("lon", lon.toString())
+                }
+                headers { append(HttpHeaders.Accept, "application/json") }
 
-        }
+            }
         return response.body()
     }
 
@@ -63,7 +65,8 @@ class ApiAccess {
          * return a list of all Point of Interest types in the database
          */
         val client = HttpClient(Android)
-        val response: HttpResponse = client.get("https://api-dev.cyclopedia.goldenrivet.xyz:443/poi/show_all_types")
+        val response: HttpResponse =
+            client.get("https://api-dev.cyclopedia.goldenrivet.xyz:443/poi/show_all_types")
         return response.body()
     }
 
@@ -73,15 +76,17 @@ class ApiAccess {
          * Method returns true if the record was processed OK and False if not
          */
         val client = HttpClient(Android)
-        val response: HttpResponse = client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
-            method = HttpMethod.Post
-            url { appendPathSegments("poi", "create_def")
-                parameters.append("poi_type", poitype)
-                parameters.append("poi_desc", poidesc)
-            }
-            headers {  append(HttpHeaders.Accept, "application/json") }
+        val response: HttpResponse =
+            client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
+                method = HttpMethod.Post
+                url {
+                    appendPathSegments("poi", "create_def")
+                    parameters.append("poi_type", poitype)
+                    parameters.append("poi_desc", poidesc)
+                }
+                headers { append(HttpHeaders.Accept, "application/json") }
 
-        }
+            }
         // Return True if the record was successfully processed.  False on all other conditions
         if (response.status.value == 200) {
             return true
@@ -90,34 +95,58 @@ class ApiAccess {
         // when you include it.
         // In the case of a failure, log the response as an error
         Log.e("CYC_API", response.body())
-            return false
-        }
+        return false
     }
-    suspend fun createPointOfInterestActual(latitude: Double, longitude: Double, altitude: Int,
-                                            timestamp: Int, poitypeid: Int,
-                                            comments: String): Boolean {
+
+    suspend fun createPointOfInterestActual(
+        latitude: Double, longitude: Double, altitude: Int,
+        timestamp: Int, poitypeid: Int,
+        comments: String
+    ): Boolean {
         /**
          * Create the actual point of interest.  Returns true if the record has processed OK
          */
         val client = HttpClient(Android)
-        val response: HttpResponse = client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
-            method = HttpMethod.Post
-            url {
-                appendPathSegments("poi", "create")
-                parameters.append("latitude", latitude.toString())
-                parameters.append("longitude", longitude.toString())
-                parameters.append("altitude", altitude.toString())
-                parameters.append("timestamp", timestamp.toString())
-                parameters.append("comments", comments)
-                parameters.append("poi_type_id", poitypeid.toString())
+        val response: HttpResponse =
+            client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
+                method = HttpMethod.Post
+                url {
+                    appendPathSegments("poi", "create")
+                    parameters.append("latitude", latitude.toString())
+                    parameters.append("longitude", longitude.toString())
+                    parameters.append("altitude", altitude.toString())
+                    parameters.append("timestamp", timestamp.toString())
+                    parameters.append("comments", comments)
+                    parameters.append("poi_type_id", poitypeid.toString())
+                }
+                headers { append(HttpHeaders.Accept, "application/json") }
             }
-            headers { append(HttpHeaders.Accept, "application/json") }
-        }
         if (response.status.value == 200) {
             return true
         }
         Log.e("CYC_API", response.body())
         return false
+    }
+
+    suspend fun getLocalPointOfInterest(lat: Double, lon: Double): String {
+        /**
+         * Pass lat and lon from the location obj. API handles the processing and returns the data
+         *
+         * @return is a string that should be converted into a JSON object to extract the data
+         */
+        val client = HttpClient(Android)
+        val response: HttpResponse =
+            client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
+                method = HttpMethod.Post
+                url {
+                    appendPathSegments("poi", "bylocation")
+                    parameters.append("lat", lat.toString())
+                    parameters.append("lon", lon.toString())
+                }
+                headers { append(HttpHeaders.Accept, "application/json") }
+
+            }
+        return response.body()
     }
 
 
