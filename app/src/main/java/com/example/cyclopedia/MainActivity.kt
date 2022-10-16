@@ -9,6 +9,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,6 +18,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
 import kotlin.collections.ArrayList
+import com.example.cyclopedia.ApiAccess
+import kotlinx.coroutines.runBlocking
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     //Marker position on map
     private var position = LatLng(-37.808514, 144.964749)
     private var location = Location(LocationManager.GPS_PROVIDER)
+    private var apiaccess = ApiAccess()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +70,12 @@ class MainActivity : AppCompatActivity() {
         location.latitude = position.latitude
         location.longitude = position.longitude
         upDateAddress(location)
+
+        runBlocking {
+            Log.d("CYC_API", apiaccess.helloworld())
+        }
+
+
     }
 
     private fun openWebPage(url: String) {
