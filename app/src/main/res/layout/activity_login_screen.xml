@@ -15,8 +15,9 @@
         android:background="#D0BCFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewForgotPassword"
         app:layout_constraintVertical_bias="0.973"
         app:srcCompat="@drawable/ic_baseline_home_24" />
 
@@ -61,6 +62,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--Button logic changed to independent, arrangement left for reference.
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/toggleButton"
         android:layout_width="318dp"
@@ -90,28 +92,31 @@
             android:padding="20dp"
             android:text="Password" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
+-->
 
     <Button
         android:id="@+id/submitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:background="@drawable/rounded_button"
         android:text="Submit"
+        app:layout_constraintBottom_toTopOf="@+id/createAcctBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordLoginBtn" />
 
     <Button
         android:id="@+id/createAcctBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
         android:text="Create an Account"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textViewForgotPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submitBtn"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.098" />
 
     <TextView
         android:id="@+id/textViewForgotPassword"
@@ -122,11 +127,90 @@
         android:text="Forgot Password?"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/homeBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createAcctBtn"
-        app:layout_constraintVertical_bias="0.219" />
+        app:layout_constraintVertical_bias="0.192"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/googleLoginBtn" />
+
+    <Button
+        android:id="@+id/emailLoginBtn"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button"
+        android:text="Email or Phone Number"
+        app:layout_constraintBottom_toTopOf="@+id/passwordLoginBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/passwordLoginBtn"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button"
+        android:text="Password"
+        app:layout_constraintBottom_toTopOf="@+id/submitBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailLoginBtn" />
+
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="380dp"
+        android:layout_height="80dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:ems="10"
+        android:foregroundGravity="center"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        android:text="Enter Email address or phone number."
+        android:textAlignment="gravity"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.374" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="380dp"
+        android:layout_height="80dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        android:textColor="#000000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.373"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
