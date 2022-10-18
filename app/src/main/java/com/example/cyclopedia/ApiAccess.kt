@@ -26,6 +26,7 @@ import kotlinx.coroutines.*
  *         runBlocking {
  *              apiaccess.helloworld()
  *              }
+ *
  */
 
 
@@ -146,6 +147,22 @@ class ApiAccess {
                 headers { append(HttpHeaders.Accept, "application/json") }
 
             }
+        return response.body()
+    }
+
+    suspend fun getAllTrackRatings(): String {
+        /**
+         * Gets all tracks and their average ratings.
+         * Returns the track name and the average
+         *
+         * {
+         *  "My new track": 3
+         * }
+         *
+         */
+        val client = HttpClient(Android)
+        val response: HttpResponse =
+            client.get("https://api-dev.cyclopedia.goldenrivet.xyz:443/stats/tracks/ratings/")
         return response.body()
     }
 
