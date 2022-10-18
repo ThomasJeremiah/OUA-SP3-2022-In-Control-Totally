@@ -98,7 +98,7 @@
         android:id="@+id/submitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_pink"
         android:text="Submit"
         app:layout_constraintBottom_toTopOf="@+id/createAcctBtn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +109,7 @@
         android:id="@+id/createAcctBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_pink"
         android:text="Create an Account"
         app:layout_constraintBottom_toTopOf="@+id/textViewForgotPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -146,25 +146,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/googleLoginBtn" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/emailLoginBtn"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_pink"
         android:text="Email or Phone Number"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/passwordLoginBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/passwordLoginBtn"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_pink"
         android:text="Password"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/submitBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -211,6 +213,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.373"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/cancelLoginBtn"
+        android:layout_width="32dp"
+        android:layout_height="31dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.294"
+        app:srcCompat="@drawable/ic_cancel"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

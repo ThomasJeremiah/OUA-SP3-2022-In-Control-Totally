@@ -10,6 +10,9 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_login_screen.*
 
 var loginCredential:String = ""
+var loginEmail:Boolean = false
+var loginPhone:Boolean = false
+var loginPassword:Boolean = false
 
 class LoginScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +24,7 @@ class LoginScreen : AppCompatActivity() {
 
         editTextEmail.visibility = View.INVISIBLE
         editTextTextPassword.visibility = View.INVISIBLE
+        cancelLoginBtn.visibility = View.INVISIBLE
 
 
         homeBtn.setOnClickListener{
@@ -33,28 +37,30 @@ class LoginScreen : AppCompatActivity() {
             /* Start OAuth using Facebook. */
         }
         textViewForgotPassword.setOnClickListener{
-            /*Start account recovery process. */
+            Toast.makeText(this@LoginScreen,"You might be in trouble...",Toast.LENGTH_LONG).show()
         }
         emailLoginBtn.setOnClickListener{
             editTextEmail.visibility = View.VISIBLE
             emailLoginBtn.visibility = View.INVISIBLE
             passwordLoginBtn.visibility = View.INVISIBLE
+            cancelLoginBtn.visibility = View.VISIBLE
         }
         passwordLoginBtn.setOnClickListener{
             editTextTextPassword.visibility = View.VISIBLE
             emailLoginBtn.visibility = View.INVISIBLE
             passwordLoginBtn.visibility = View.INVISIBLE
+            cancelLoginBtn.visibility = View.VISIBLE
         }
         submitBtn.setOnClickListener{
             if(editTextEmail.visibility == View.VISIBLE){
                 loginCredential = editTextEmail.text.toString()
                 hideKeyboard()
-                Toast.makeText(this@LoginScreen,"$loginCredential",Toast.LENGTH_SHORT).show()
             } else {
                 if (editTextTextPassword.visibility == View.VISIBLE){
                     loginCredential = editTextTextPassword.text.toString()
                     hideKeyboard()
                     Toast.makeText(this@LoginScreen,"$loginCredential",Toast.LENGTH_SHORT).show()
+                    loginPassword = true
                 } else {
                     Toast.makeText(this@LoginScreen,"Please select a login option",Toast.LENGTH_SHORT).show()
                 }
@@ -63,6 +69,50 @@ class LoginScreen : AppCompatActivity() {
             editTextTextPassword.visibility = View.INVISIBLE
             emailLoginBtn.visibility = View.VISIBLE
             passwordLoginBtn.visibility = View.VISIBLE
+            cancelLoginBtn.visibility = View.INVISIBLE
+
+            //Try and pull out the format (number or email address). Refactor to move this to a discreete function.
+            if (loginCredential == "Enter Email address or phone number.") {
+                loginCredential = null.toString()
+                Toast.makeText(this@LoginScreen,"Please select a login option",Toast.LENGTH_SHORT).show()
+                loginEmail = false
+                loginPhone = false
+                loginPassword = false
+            } else {
+                if (loginCredential.containsAnyOfIgnoreCase(listOf("@",".com",".net"))){
+                    //user entered string contains sub-strings that might be part of an email address. Should refactor this with regex.
+                    Toast.makeText(this@LoginScreen,"$loginCredential | Looks like an email" ,Toast.LENGTH_SHORT).show()
+                    loginEmail = true
+                    loginPhone = false
+                    loginPassword = false
+                } else {
+                    val tempNum = loginCredential.filter { !it.isWhitespace() }
+                    try {
+                        val tryNum = tempNum.toInt()
+                        loginCredential = tryNum.toString()
+                        Toast.makeText(this@LoginScreen,"$loginCredential | Looks like a phone number" ,Toast.LENGTH_SHORT).show()
+                        loginEmail = false
+                        loginPhone = true
+                        loginPassword = false
+                    } catch (e:Exception) {
+                        //Cannot convert value to an integer.
+                        Toast.makeText(this@LoginScreen,"Please enter a valid email or phone number" ,Toast.LENGTH_SHORT).show()
+                        loginEmail = false
+                        loginPhone = false
+                        loginPassword = false
+                    }
+                }
+            }
+
+        }
+        cancelLoginBtn.setOnClickListener{
+            loginCredential = null.toString()
+            editTextEmail.visibility = View.INVISIBLE
+            editTextTextPassword.visibility = View.INVISIBLE
+            emailLoginBtn.visibility = View.VISIBLE
+            passwordLoginBtn.visibility = View.VISIBLE
+            cancelLoginBtn.visibility = View.INVISIBLE
+            hideKeyboard()
         }
 
         /**Button behaviour changed to independent. Toggle logic left for reference.
@@ -86,11 +136,17 @@ class LoginScreen : AppCompatActivity() {
             }
         }*/
     }
-    fun Activity.hideKeyboard(view:View){
+    private fun Activity.hideKeyboard(view:View){
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
     }
-    fun Activity.hideKeyboard(){
+    private fun Activity.hideKeyboard(){
         hideKeyboard(currentFocus?:View(this))
+    }
+    fun String.containsAnyOfIgnoreCase(keywords: List<String>): Boolean {
+        for (keyword in keywords) {
+            if (this.contains(keyword, true)) return true
+        }
+        return false
     }
 }

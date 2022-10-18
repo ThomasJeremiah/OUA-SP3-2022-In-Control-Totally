@@ -8,10 +8,15 @@ import kotlinx.android.synthetic.main.activity_reports_screen.*
 class ReportsScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Hides the top bar
+        supportActionBar?.hide()
         setContentView(R.layout.activity_reports_screen)
 
         homeBtn.setOnClickListener{
             startActivity(Intent(this,MainActivity::class.java))
+        }
+        newReportNavBtn.setOnClickListener {
+            startActivity(Intent(this, NewReportScreen::class.java))
         }
     }
 }
