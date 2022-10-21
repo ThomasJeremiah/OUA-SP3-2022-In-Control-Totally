@@ -124,7 +124,7 @@ class ApiAccess {
                         "\"altitude\": $altitude," +
                         "\"timestamp\": $timestamp," +
                         "\"comments\": \"$comments\"," +
-                        "\"poi_type_id\": $poitypeid" +
+                        "\"poi_type_id\": $pointypeid" +
                         "}")
             }
         if (response.status.value == 200) {

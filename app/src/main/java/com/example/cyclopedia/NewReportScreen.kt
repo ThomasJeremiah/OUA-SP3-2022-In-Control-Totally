@@ -73,11 +73,9 @@ class NewReportScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         submitReportBtn.setOnClickListener{
             Toast.makeText(this@NewReportScreen,"Submit button clicked",Toast.LENGTH_SHORT).show()
             var lat = markerPos!!.position.latitude
-            Log.e("Lat","$lat")
             var lon = markerPos!!.position.longitude
-            Log.e("Lat","$lon")
             var alt = 0
-            var ts = 12345
+            var ts = 12345//System.currentTimeMillis()
             var pointTypeID = 1
             var comments = "None supplied"
             try {
@@ -186,11 +184,5 @@ class NewReportScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             }
 
         }
-    }
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun dateFormatter(): Long {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyMMddHHmmss")
-        return current.format(formatter).toLong()
     }
 }

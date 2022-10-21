@@ -15,12 +15,15 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_local_area.*
 import kotlinx.android.synthetic.main.activity_main.mapView
 import com.example.cyclopedia.ApiAccess
+import com.google.android.gms.maps.model.Marker
+import kotlinx.android.synthetic.main.activity_new_report_screen.*
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 
 private var position = LatLng(-37.808514, 144.964749)
 private var location = Location(LocationManager.GPS_PROVIDER)
 private var apiaccess = ApiAccess()
+var markerList:ArrayList<MarkerOptions> = ArrayList()
 
 class LocalArea : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,15 +58,41 @@ class LocalArea : AppCompatActivity() {
         upDatePoints.setOnClickListener{
             //Call API and add markers to map
             getMarkers()
+            with(mapView) {
+                // Set the map ready callback to receive the GoogleMap object
+                getMapAsync{
+                    showMarkers(it)
+                }
+            }
         }
     }
 
     private fun getMarkers() {
         var markerString: String
+        var markerJson: JSONArray
         runBlocking {
             markerString = apiaccess.getLocalPointOfInterest(position.latitude, position.longitude)
         }
-Log.d("API Response body","$markerString")
+        Log.d("API Response body","$markerString")
+        markerJson = JSONArray(markerString)
+        Log.d("JSON response","$markerJson")
+        markerList.clear()
+        for (i in 0 until markerJson.length()){
+            val item = markerJson.getJSONObject(i)
+            Log.d("Response $i","$item")
+            val marker = MarkerOptions().position(LatLng(item.getDouble("latitude"),item.getDouble("longitude")))
+            markerList.add(marker)
+        }
+    }
+
+    private fun showMarkers(map : GoogleMap){
+        for(marker in markerList){
+            with(map){
+                addMarker(marker)
+                Log.d("Marker","${marker}")
+            }
+        }
+
     }
 
     private fun updateMapLocation(map : GoogleMap) {
