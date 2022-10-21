@@ -136,6 +136,7 @@ class LocationTrack(private val mContext: Context) : Service(), LocationListener
                     }
                 }
             } catch (e: Exception) {
+                Log.d("Access permissions: ","Unavailable")
                 e.printStackTrace()
             }
             return loc
@@ -155,13 +156,15 @@ class LocationTrack(private val mContext: Context) : Service(), LocationListener
         return latitude
     }
     fun getLocationVar(): Location {
+        Log.d("Got here","")
         if (loc != null) {
 
         }
-        return loc!!
+        return this.loc!!
     }
 
     fun canGetLocation(): Boolean {
+        Log.d("Can get location: ","$canGetLocation")
         return canGetLocation
     }
 

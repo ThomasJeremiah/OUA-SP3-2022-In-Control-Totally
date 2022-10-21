@@ -6,16 +6,100 @@
     android:layout_height="match_parent"
     android:background="#381E72"
     tools:context=".NewReportScreen">
+
     <ImageView
         android:id="@+id/homeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#D0BCFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.974"
-        app:srcCompat="@drawable/ic_baseline_home_24"
-        android:background="#D0BCFF"/>
+        app:srcCompat="@drawable/ic_baseline_home_24" />
+
+    <view
+        android:id="@+id/mapView"
+        class="com.google.android.gms.maps.MapView"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Report"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/mapView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/pinpointLocationBtn"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button_grey"
+        android:text="Pinpoint Location"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/hazTypeSpin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+
+    <!--Formatting on this is in two places,
+     ...res/layout/spinner_layout_as_button.xml
+     &
+     ...res/drawable/spinner_outline_green.xml-->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/hazWildlifeBtn"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button_green"
+        android:text="Wildlife Hazard"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/submitReportBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hazTypeSpin" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/submitReportBtn"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_button_default"
+        android:backgroundTint="#EC928E"
+        android:text="Submit Report"
+        app:layout_constraintBottom_toTopOf="@+id/homeBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hazWildlifeBtn" />
+
+    <Spinner
+        android:id="@+id/hazTypeSpin"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/spinner_outline_green"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toTopOf="@+id/hazWildlifeBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pinpointLocationBtn"
+        app:layout_constraintVertical_bias="0.642"
+        tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

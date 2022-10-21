@@ -103,7 +103,7 @@ class ApiAccess {
 
     suspend fun createPointOfInterestActual(
         latitude: Double, longitude: Double, altitude: Int,
-        timestamp: Int, poitypeid: Int,
+        timestamp: Int, pointypeid: Int,
         comments: String
     ): Boolean {
         /**
