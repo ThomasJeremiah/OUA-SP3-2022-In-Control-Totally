@@ -82,11 +82,13 @@ class ApiAccess {
                 method = HttpMethod.Post
                 url {
                     appendPathSegments("poi", "create_def")
-                    parameters.append("poi_type", poitype)
-                    parameters.append("poi_desc", poidesc)
                 }
                 headers { append(HttpHeaders.Accept, "application/json") }
-
+                setBody("{" +
+                        "\"poi_type\": \"$poitype\"," +
+                        "\"poi_desc\": \"$poidesc\"" +
+                        "}"
+                )
             }
         // Return True if the record was successfully processed.  False on all other conditions
         if (response.status.value == 200) {
@@ -117,12 +119,12 @@ class ApiAccess {
                 }
                 headers { append(HttpHeaders.Accept, "application/json") }
                 setBody("{" +
-                        "latitude: $latitude,"  +
-                        "longitude: $longitude," +
-                        "altitude: $altitude," +
-                        "timestamp: $timestamp," +
-                        "comments: \"$comments\"," +
-                        "poi_type_id: $poitypeid" +
+                        "\"latitude\": $latitude,"  +
+                        "\"longitude\": $longitude," +
+                        "\"altitude\": $altitude," +
+                        "\"timestamp\": $timestamp," +
+                        "\"comments\": \"$comments\"," +
+                        "\"poi_type_id\": $poitypeid" +
                         "}")
             }
         if (response.status.value == 200) {
