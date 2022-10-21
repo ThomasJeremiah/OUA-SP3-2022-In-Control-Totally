@@ -100,7 +100,7 @@ class ApiAccess {
 
     suspend fun createPointOfInterestActual(
         latitude: Double, longitude: Double, altitude: Int,
-        timestamp: Int, poitypeid: Int,
+        timestamp: Int, pointypeid: Int,
         comments: String
     ): Boolean {
         /**
@@ -117,7 +117,7 @@ class ApiAccess {
                     parameters.append("altitude", altitude.toString())
                     parameters.append("timestamp", timestamp.toString())
                     parameters.append("comments", comments)
-                    parameters.append("poi_type_id", poitypeid.toString())
+                    parameters.append("poi_type_id", pointypeid.toString())
                 }
                 headers { append(HttpHeaders.Accept, "application/json") }
             }

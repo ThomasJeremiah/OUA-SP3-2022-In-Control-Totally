@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         }
         mapButton.setOnClickListener{
-            Toast.makeText (this@MainActivity, "Clicked on map button", Toast.LENGTH_SHORT).show()
+            //Nav to activity (screen)
+            startActivity(Intent(this,LocalArea::class.java))
         }
         reportButton.setOnClickListener{
             //Nav to activity (screen)
@@ -135,11 +136,19 @@ class MainActivity : AppCompatActivity() {
     }
     private fun updateLocation() {
         if (LocationTrack(this).canGetLocation) {
+            Log.d("LocationTrack.canGetLocation: ","True")
             Toast.makeText(this@MainActivity,"Got location",Toast.LENGTH_SHORT).show()
+            Log.d("LocationTrack: ","Fetching lat/long")
             position = LatLng(LocationTrack(this).getLatitude(),LocationTrack(this).getLongitude())
+            Log.d("LocationTrack: ","Got lat/long")
             textView_GPS_coord.text = position.toString()
+            Log.d("LocationTrack: ","Fetching location object")
+
             location = LocationTrack(this).getLocationVar()
+            Log.d("LocationTrack: ","Got location object")
+            Log.d("MainActivity.updateLocation: ","Calling function")
             upDateAddress(location)
+            Log.d("MainActivity.updateLocation: ","Returned from function")
             with(mapView) {
 
                 // Set the map ready callback to receive the GoogleMap object
