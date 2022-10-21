@@ -26,6 +26,7 @@ import kotlinx.coroutines.*
  *         runBlocking {
  *              apiaccess.helloworld()
  *              }
+ *
  */
 
 
@@ -81,11 +82,13 @@ class ApiAccess {
                 method = HttpMethod.Post
                 url {
                     appendPathSegments("poi", "create_def")
-                    parameters.append("poi_type", poitype)
-                    parameters.append("poi_desc", poidesc)
                 }
                 headers { append(HttpHeaders.Accept, "application/json") }
-
+                setBody("{" +
+                        "\"poi_type\": \"$poitype\"," +
+                        "\"poi_desc\": \"$poidesc\"" +
+                        "}"
+                )
             }
         // Return True if the record was successfully processed.  False on all other conditions
         if (response.status.value == 200) {
@@ -110,16 +113,19 @@ class ApiAccess {
         val response: HttpResponse =
             client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
                 method = HttpMethod.Post
+                contentType(ContentType.Application.Json)
                 url {
                     appendPathSegments("poi", "create")
-                    parameters.append("latitude", latitude.toString())
-                    parameters.append("longitude", longitude.toString())
-                    parameters.append("altitude", altitude.toString())
-                    parameters.append("timestamp", timestamp.toString())
-                    parameters.append("comments", comments)
-                    parameters.append("poi_type_id", pointypeid.toString())
                 }
                 headers { append(HttpHeaders.Accept, "application/json") }
+                setBody("{" +
+                        "\"latitude\": $latitude,"  +
+                        "\"longitude\": $longitude," +
+                        "\"altitude\": $altitude," +
+                        "\"timestamp\": $timestamp," +
+                        "\"comments\": \"$comments\"," +
+                        "\"poi_type_id\": $poitypeid" +
+                        "}")
             }
         if (response.status.value == 200) {
             return true
@@ -146,6 +152,22 @@ class ApiAccess {
                 headers { append(HttpHeaders.Accept, "application/json") }
 
             }
+        return response.body()
+    }
+
+    suspend fun getAllTrackRatings(): String {
+        /**
+         * Gets all tracks and their average ratings.
+         * Returns the track name and the average
+         *
+         * {
+         *  "My new track": 3
+         * }
+         *
+         */
+        val client = HttpClient(Android)
+        val response: HttpResponse =
+            client.get("https://api-dev.cyclopedia.goldenrivet.xyz:443/stats/tracks/ratings/")
         return response.body()
     }
 
