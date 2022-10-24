@@ -1,5 +1,9 @@
 package com.example.cyclopedia
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Icon
 import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
@@ -7,23 +11,25 @@ import android.os.Bundle
 import android.util.JsonReader
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.material.Icon
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_local_area.*
 import kotlinx.android.synthetic.main.activity_main.mapView
 import com.example.cyclopedia.ApiAccess
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_new_report_screen.*
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
+import java.util.Dictionary
 
 private var position = LatLng(-37.808514, 144.964749)
 private var location = Location(LocationManager.GPS_PROVIDER)
 private var apiaccess = ApiAccess()
 var markerList:ArrayList<MarkerOptions> = ArrayList()
+private var poiTypes: JSONArray = JSONArray()
 
 class LocalArea : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +39,10 @@ class LocalArea : AppCompatActivity() {
         supportActionBar?.hide()
 
         setContentView(R.layout.activity_local_area)
+        getPOItypes()
+        for (i in 0 until poiTypes.length()){
+            Log.d("POI Types", poiTypes.getJSONObject(i).toString())
+        }
 
         with(mapView) {
             // Initialise the MapView
@@ -70,6 +80,7 @@ class LocalArea : AppCompatActivity() {
     private fun getMarkers() {
         var markerString: String
         var markerJson: JSONArray
+        var poiDictionary = emptyMap<String,String>()
         runBlocking {
             markerString = apiaccess.getLocalPointOfInterest(position.latitude, position.longitude)
         }
@@ -80,9 +91,27 @@ class LocalArea : AppCompatActivity() {
         for (i in 0 until markerJson.length()){
             val item = markerJson.getJSONObject(i)
             Log.d("Response $i","$item")
-            val marker = MarkerOptions().position(LatLng(item.getDouble("latitude"),item.getDouble("longitude")))
+            for (j in 0 until poiTypes.length()){
+                if (item.getInt("poi_type_id") == poiTypes.getJSONObject(j).getInt("poi_type_id")){
+                    poiDictionary = mapOf("type_name" to poiTypes.getJSONObject(j).getString("poi_type_name"),"typeDesc" to poiTypes.getJSONObject(j).getString("poi_type_description"))
+                }
+            }
+            val marker = MarkerOptions()
+                .position(LatLng(item.getDouble("latitude"),item.getDouble("longitude")))
+                .icon(bitmapDescriptorFromVector(this,R.drawable.ic_danger))
+                .title(if(poiDictionary != null) poiDictionary["type_name"] else "Undefined!")
+                .snippet(item.getString("comments"))
+
             markerList.add(marker)
         }
+    }
+    private fun getPOItypes (){
+        var typesString: String
+        runBlocking {
+            typesString  = apiaccess.getAllPointOfInterestTypes()
+        }
+        Log.d("typesString","$typesString")
+        poiTypes = JSONArray(typesString)
     }
 
     private fun showMarkers(map : GoogleMap){
@@ -122,4 +151,25 @@ class LocalArea : AppCompatActivity() {
         super.onLowMemory()
         mapView.onLowMemory()
     }
+    fun bitmapDescriptorFromVector(
+        context: Context,
+        vectorResId: Int
+    ): BitmapDescriptor? {
+
+        // retrieve the actual drawable
+        val drawable = ContextCompat.getDrawable(context, vectorResId) ?: return null
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        val bm = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+
+        // draw it onto the bitmap
+        val canvas = android.graphics.Canvas(bm)
+        drawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bm)
+    }
+
+
 }

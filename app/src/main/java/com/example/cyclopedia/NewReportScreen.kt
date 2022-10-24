@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_new_report_screen.mapView
 import kotlinx.coroutines.runBlocking
+import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -37,6 +38,8 @@ private var location = Location(LocationManager.GPS_PROVIDER)
 private var markerPos: Marker? = null
 private var hazardType: String? = null
 private var apiaccess = ApiAccess()
+private var poiTypes: JSONArray = JSONArray()
+var pointTypeID:Int = 0
 
 class NewReportScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -59,13 +62,15 @@ class NewReportScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             }
         }
 
+
+
         //Janky way of setting default text to spinner
         hazChoices.add(0,"Type of hazard")
-        //Add rest of options - move this to a function...
-        hazChoices.add("Tree")
-        hazChoices.add("Rock")
-        hazChoices.add("Stick")
-        hazChoices.add("Crash")
+        //Add rest of options
+        getPOItypes()
+        for (j in 0 until poiTypes.length()){
+            hazChoices.add(poiTypes.getJSONObject(j).getString("poi_type_name"))
+        }
 
         homeBtn.setOnClickListener{
             startActivity(Intent(this,MainActivity::class.java))
@@ -76,8 +81,7 @@ class NewReportScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             var lon = markerPos!!.position.longitude
             var alt = 0
             var ts = 12345//System.currentTimeMillis()
-            var pointTypeID = 1
-            var comments = "None supplied"
+            var comments = if(editTextReportComment.text.toString() == "Comment") "None supplied" else editTextReportComment.text.toString()
             try {
                 runBlocking {
                     apiaccess.createPointOfInterestActual(lat, lon, alt, ts, pointTypeID, comments)
@@ -112,9 +116,17 @@ class NewReportScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         when (view?.id) {
             1 -> Toast.makeText(this@NewReportScreen,"Spinner 2 Position: ${position} amd hazard: ${hazChoices[position]}",Toast.LENGTH_SHORT).show()
             else -> {
-                Toast.makeText(this@NewReportScreen,"Spinner 1 Position: ${position} amd hazard: ${hazChoices[position]}",Toast.LENGTH_SHORT).show()
-                hazardType = hazChoices[position]
                 Log.d("Hazard choice: ","$hazardType")
+                if (hazChoices[position] == "Type of hazard"){
+                    Toast.makeText(this@NewReportScreen,"Please choose a hazard from the list.",Toast.LENGTH_SHORT).show()
+                } else {
+                    hazardType = hazChoices[position]
+                    for (i in 0 until poiTypes.length()){
+                        if (poiTypes.getJSONObject(i).getString("poi_type_name") == hazardType){
+                            pointTypeID = poiTypes.getJSONObject(i).getInt("poi_type_id")
+                        }
+                    }
+                }
             }
         }
     }
@@ -184,5 +196,13 @@ class NewReportScreen : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             }
 
         }
+    }
+    private fun getPOItypes (){
+        var typesString: String
+        runBlocking {
+            typesString  = apiaccess.getAllPointOfInterestTypes()
+        }
+        Log.d("typesString","$typesString")
+        poiTypes = JSONArray(typesString)
     }
 }
