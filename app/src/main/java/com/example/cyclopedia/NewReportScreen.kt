@@ -22,13 +22,9 @@ import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_new_report_screen.mapView
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 
 

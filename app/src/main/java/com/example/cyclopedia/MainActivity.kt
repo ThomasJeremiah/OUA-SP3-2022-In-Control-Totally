@@ -73,9 +73,10 @@ class MainActivity : AppCompatActivity() {
         location.longitude = position.longitude
         upDateAddress(location)
 
+        /**
         runBlocking {
             Log.d("CYC_API", apiaccess.helloworld())
-        }
+        }**/
 
 
     }

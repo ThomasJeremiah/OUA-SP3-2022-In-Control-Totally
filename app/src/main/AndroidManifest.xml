@@ -18,6 +18,13 @@
         android:theme="@style/Theme.Cyclopedia"
         tools:targetApi="31">
         <activity
+            android:name=".TrackRating"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".LocalArea"
             android:exported="false">
             <meta-data
