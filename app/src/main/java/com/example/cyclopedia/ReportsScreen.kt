@@ -21,5 +21,8 @@ class ReportsScreen : AppCompatActivity() {
         newRatingNavBtn.setOnClickListener {
             startActivity(Intent(this, TrackRating::class.java))
         }
+        seeRatingsNavBtn.setOnClickListener {
+            startActivity(Intent(this, ExistingRatings::class.java))
+        }
     }
 }
