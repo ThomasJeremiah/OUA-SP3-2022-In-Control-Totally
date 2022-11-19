@@ -62,18 +62,12 @@ class LocationTrack(private val mContext: Context) : Service(), LocationListener
                                 mContext, Manifest.permission.ACCESS_COARSE_LOCATION
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
                             Toast.makeText(
                                 mContext,
                                 "Location Permission Is Not Granted!",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            canGetLocation = false
                             ActivityCompat.requestPermissions(
                                 (mContext as Activity),
                                 arrayOf(
