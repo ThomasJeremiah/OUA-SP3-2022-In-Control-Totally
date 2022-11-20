@@ -180,7 +180,7 @@ class ApiAccess {
         val client = HttpClient(Android)
         val response: HttpResponse =
             client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
-                method = HttpMethod.Post
+                method = HttpMethod.Get
                 url {
                     appendPathSegments("stats", "distance/")
                     parameters.append("user_id", user_id.toString())
@@ -204,10 +204,34 @@ class ApiAccess {
         val client = HttpClient(Android)
         val response: HttpResponse =
             client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
-                method = HttpMethod.Post
+                method = HttpMethod.Get
                 url {
                     appendPathSegments("stats", "distanceranking")
                 }
+                headers { append(HttpHeaders.Accept, "application/json") }
+
+            }
+        if (response.status.value != 200) {
+            Log.e("CYC_API", response.body())
+        }
+        return response.body()
+    }
+
+    suspend fun getUserDetails(user_id: Int): String {
+        /**
+         * Get the total sum of all journey distances recorded.
+         * If the user_id is 0 (or not passed) it gets all distance.  If a user_id is passed it gets
+         * the specific users total distance
+         */
+        val client = HttpClient(Android)
+        val response: HttpResponse =
+            client.request("https://api-dev.cyclopedia.goldenrivet.xyz:443/") {
+                method = HttpMethod.Get
+                url {
+                    appendPathSegments("user",user_id.toString())
+
+                }
+
                 headers { append(HttpHeaders.Accept, "application/json") }
 
             }

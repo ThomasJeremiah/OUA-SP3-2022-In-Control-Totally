@@ -21,6 +21,7 @@ class ExistingRatings : AppCompatActivity() {
     private var apiaccess = ApiAccess()
     private var ratingsResponse = ""
     private var ratingsString = ""
+    private var userDetails = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,13 +37,46 @@ class ExistingRatings : AppCompatActivity() {
         }
 
         var ratingsOject = JSONObject(ratingsResponse)
-        val keys = ratingsOject.keys()
+        var keys = ratingsOject.keys()
         while (keys.hasNext()) {
             val key = keys.next()
             val value = ratingsOject.optString(key)
             Log.d("Ratings", "$key: $value")
             ratingsString = "$ratingsString$key: $value\n"
         }
+
+        runBlocking {
+            // TODO:
+            ratingsResponse = apiaccess.getDistance()
+        }
+        var communityTotal = ratingsResponse.toDouble()
+        ratingsString = "$ratingsString \n Total distance ridden by community: $communityTotal"
+        ratingsString = "$ratingsString \n\n User leaderboard:"
+
+        runBlocking {
+            // TODO:
+            ratingsResponse = apiaccess.getRankedDistance()
+        }
+        var userRank = JSONArray(ratingsResponse)
+        for (i in 0 until  userRank.length()){
+            val userID = userRank.getJSONObject(i).getInt("user_id")
+            Log.d("UserID", "$userID")
+            runBlocking {
+                userDetails = apiaccess.getUserDetails(userID)
+            }
+            Log.d("Ratings", "$userDetails")
+            val userObject = JSONObject(userDetails)
+            val rank = i + 1
+            val userFName = userObject.getString("f_name")
+            val userLName = userObject.getString("l_name")
+            val distanceTraveled = userRank.getJSONObject(i).getLong("distance_travelled")
+            val formattedRanking =
+                String.format("%1s %5s %5s %10s", rank, userFName, userLName, distanceTraveled)
+            ratingsString = "$ratingsString \n $formattedRanking"
+        }
+
+
+
 
         scrollWindow.text = ratingsString
 
