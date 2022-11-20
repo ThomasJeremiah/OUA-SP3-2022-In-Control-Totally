@@ -219,9 +219,14 @@ class ApiAccess {
 
     suspend fun getUserDetails(user_id: Int): String {
         /**
-         * Get the total sum of all journey distances recorded.
-         * If the user_id is 0 (or not passed) it gets all distance.  If a user_id is passed it gets
-         * the specific users total distance
+         * Returns the user object for supplied ID.
+         * {
+         *  "f_name":
+         *  "l_name":
+         *  "creation_dt":
+         *  "email":
+         *  "user_id":
+         * }
          */
         val client = HttpClient(Android)
         val response: HttpResponse =
@@ -229,11 +234,8 @@ class ApiAccess {
                 method = HttpMethod.Get
                 url {
                     appendPathSegments("user",user_id.toString())
-
                 }
-
                 headers { append(HttpHeaders.Accept, "application/json") }
-
             }
         if (response.status.value != 200) {
             Log.e("CYC_API", response.body())
