@@ -31,6 +31,11 @@ class ExistingRatings : AppCompatActivity() {
 
         scrollWindow.text = "No records available to display!"
 
+
+        /*
+        Need to add exception handling to this
+        If the API calls fail the app crashes.
+         */
         runBlocking {
             // TODO:
             ratingsResponse = apiaccess.getAllTrackRatings()
